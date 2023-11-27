@@ -13,14 +13,21 @@ function GameBoard(){
     const getBoard = () => board;
 
     const addSelection = (cell, player) => {
+       const flatBoard = board.flat();
+
+       if(cell < 0 || cell >= flatBoard.length){
+        console.log("Invalid Cell Index");
+        return;
+       }
+
+       const selectedCell = flatBoard[cell]
+
+        if(selectedCell.getValue() === ""){
+            selectedCell.changeValue(player);
+        } else{
+            console.log("Cell already taken");
+        }
         
-        const availableCells = board.map((row) => row[cell]).filter((cell) => cell.getValue() === "");
-
-
-        if(!availableCells.length)return;
-
-        const upperRow = availableCells.length -1;
-        availableCells[upperRow].changeValue(player);
     }
 
     const printBoard = () => {
@@ -84,7 +91,9 @@ function GameController(){
         )
         board.addSelection(cell, getActivePlayer().value)
 
-
+        /**
+         * Check for winner logic here
+         */
 
         switchPlayer();
         printNewRound();
@@ -100,19 +109,3 @@ function GameController(){
 }
 
 const game = GameController();
-
-game.playRound(0)
-game.playRound(0)
-
-/*
-const newBoard = GameBoard();
-newBoard.printBoard();
-
-prompt1 = prompt("Player 1 name:")
-prompt2 = prompt("Player 2 name:")
-const daniel = Players(prompt1)
-const david = Players(undefined,prompt2)
-
-console.log(daniel.players[0])
-console.log(david.players[1])
-*/
