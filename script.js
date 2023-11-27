@@ -6,24 +6,44 @@ function GameBoard(){
     for (let i = 0;i < rows; i++ ){
         board [i] = [];
         for (let j = 0;j < columns; j++){
-            board[i].push(cell());
+            board[i].push(Cell());
         }
     }
 
     const getBoard = () => board;
 
-    console.log(board)
+    const addSelection = (column, player) => {
+        
+        const availableCells = board.filter((row) => row[column].getValue() === 0).map(row => row[column]);
 
-   return{ getBoard, }
+
+        if(!availableCells.length)return
+
+        const upperRow = availableCells.length = 0;
+        board[upperRow][column].addValue(player);
+    }
+
+    const printBoard = () => {
+        const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()))
+        console.log(boardWithCellValues);
+    };
+
+
+   return{ getBoard, addSelection, printBoard }
 }
 
-function cell(){
-    let value = 0;
+function Cell(){
+    let value = ""
+
+    const addValue = (player) => {
+        value = player
+    }
 
     const getValue = () => value;
 
     return{
-        getValue,
+      addValue,
+      getValue,
     }
 }
 
@@ -31,21 +51,23 @@ function Players(
     playerOneName = "Player One",
     playerTwoName = "Player Two"){
 
-        const Players = [
+        const players = [
         {
             name: playerOneName,
+            value: "x"
         },
         {
-            name: playerTwoName
+            name: playerTwoName,
+            value: "o"
         }
     ]
         
-    console.log(Players[1])
+    console.log(players[0])
 }
 
 function GameController(){
 
 }
 
-Players()
-GameBoard();
+console.log(newBoard.printBoard())
+
