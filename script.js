@@ -19,7 +19,7 @@ function GameBoard(){
 
         if(!availableCells.length)return
 
-        const upperRow = availableCells.length = 0;
+        const upperRow = availableCells[0]
         board[upperRow][column].addValue(player);
     }
 
@@ -47,9 +47,7 @@ function Cell(){
     }
 }
 
-function Players(
-    playerOneName = "Player One",
-    playerTwoName = "Player Two"){
+function Players(playerOneName, playerTwoName){
 
         const players = [
         {
@@ -61,13 +59,22 @@ function Players(
             value: "o"
         }
     ]
-        
-    console.log(players[0])
+        return { players,}
 }
 
 function GameController(){
 
 }
 
-console.log(newBoard.printBoard())
+const newBoard = GameBoard()
+newBoard.printBoard()
 
+/* Add name to players with prompt
+prompt1 = prompt("Player 1 name:")
+prompt2 = prompt("Player 2 name:")
+const daniel = Players(prompt1)
+const david = Players(undefined,prompt2)
+
+console.log(daniel.players[0])
+console.log(david.players[1])
+*/
