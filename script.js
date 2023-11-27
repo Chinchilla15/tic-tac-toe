@@ -1,6 +1,6 @@
 function GameBoard(){
     const columns = 3;
-    const rows = 3
+    const rows = 3;
     const board = [];
     
     for (let i = 0;i < rows; i++ ){
@@ -17,10 +17,10 @@ function GameBoard(){
         const availableCells = board.filter((row) => row[column].getValue() === 0).map(row => row[column]);
 
 
-        if(!availableCells.length)return
+        if(!availableCells.length)return;
 
-        const upperRow = availableCells[0]
-        board[upperRow][column].addValue(player);
+        const upperRow = availableCells -1;
+        board[upperRow][column].changeValue(player);
     }
 
     const printBoard = () => {
@@ -29,27 +29,27 @@ function GameBoard(){
     };
 
 
-   return{ getBoard, addSelection, printBoard }
+   return{ getBoard, addSelection, printBoard };
 }
 
 function Cell(){
-    let value = ""
+    let value = "";
 
-    const addValue = (player) => {
-        value = player
+    const changeValue = (player) => {
+        value = player;
     }
 
     const getValue = () => value;
 
     return{
-      addValue,
+      changeValue,
       getValue,
     }
 }
 
-function Players(playerOneName, playerTwoName){
+function Players(playerOneName = "Player One", playerTwoName = "Player Two"){
 
-        const players = [
+        const playersInfo = [
         {
             name: playerOneName,
             value: "x"
@@ -59,17 +59,55 @@ function Players(playerOneName, playerTwoName){
             value: "o"
         }
     ]
-        return { players,}
+        return { playersInfo,}
 }
 
 function GameController(){
+    const board = GameBoard();
+    const players = Players();
+    let activePlayer = players.playersInfo[0]
 
+    const switchPlayer = () =>{
+        activePlayer = activePlayer === players.playersInfo[0] ? players.playersInfo[1] : players.playersInfo[0]
+    }
+
+    const getActivePlayer = () => activePlayer;
+
+    const printNewRound = () =>{
+        board.printBoard();
+        console.log(`${getActivePlayer().name}'s turn.`);
+    }
+
+    const playRound = (column) =>{
+        console.log(
+            `Adding ${getActivePlayer().name}'s selection into cell ${column}`
+        )
+        board.addSelection(column, getActivePlayer().value)
+
+
+
+        switchPlayer();
+        printNewRound();
+    }
+
+    printNewRound()
+
+    return{
+       playRound,
+       switchPlayer,
+       getActivePlayer
+    }
 }
 
-const newBoard = GameBoard()
-newBoard.printBoard()
+const game = GameController();
 
-/* Add name to players with prompt
+game.playRound(2)
+
+
+/*
+const newBoard = GameBoard();
+newBoard.printBoard();
+
 prompt1 = prompt("Player 1 name:")
 prompt2 = prompt("Player 2 name:")
 const daniel = Players(prompt1)
