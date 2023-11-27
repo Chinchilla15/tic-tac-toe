@@ -12,15 +12,15 @@ function GameBoard(){
 
     const getBoard = () => board;
 
-    const addSelection = (column, player) => {
+    const addSelection = (cell, player) => {
         
-        const availableCells = board.filter((row) => row[column].getValue() === 0).map(row => row[column]);
+        const availableCells = board.map((row) => row[cell]).filter((cell) => cell.getValue() === "");
 
 
         if(!availableCells.length)return;
 
-        const upperRow = availableCells -1;
-        board[upperRow][column].changeValue(player);
+        const upperRow = availableCells.length -1;
+        availableCells[upperRow].changeValue(player);
     }
 
     const printBoard = () => {
@@ -78,11 +78,11 @@ function GameController(){
         console.log(`${getActivePlayer().name}'s turn.`);
     }
 
-    const playRound = (column) =>{
+    const playRound = (cell) =>{
         console.log(
-            `Adding ${getActivePlayer().name}'s selection into cell ${column}`
+            `Adding ${getActivePlayer().name}'s selection into cell ${cell}`
         )
-        board.addSelection(column, getActivePlayer().value)
+        board.addSelection(cell, getActivePlayer().value)
 
 
 
@@ -101,8 +101,8 @@ function GameController(){
 
 const game = GameController();
 
-game.playRound(2)
-
+game.playRound(0)
+game.playRound(0)
 
 /*
 const newBoard = GameBoard();
