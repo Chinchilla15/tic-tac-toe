@@ -10,6 +10,8 @@ function GameBoard(){
         };
     };
 
+    
+
     const getBoard = () => board;
     const flatBoard = board.flat();
 
@@ -126,9 +128,11 @@ function GameController(){
             if(winner){
                 console.log(`${winner} wins! Congratulations, ${getActivePlayer().name}! Game over.`);
                 board.printBoard();
+                return;
             }else if(board.isBoardFull()){
                 console.log("It's a draw! Game over.");
                 board.printBoard();
+                return;
             }else{
                 console.log(
                     `Adding ${getActivePlayer().name}'s selection into cell ${cell}`
@@ -147,9 +151,47 @@ function GameController(){
 
     return{
        playRound,
-       switchPlayer,
-       getActivePlayer
+       getActivePlayer,
+       getBoard: board.getBoard
     };
 };
 
-const game = GameController();
+function screenController(){
+    const game = GameController();
+    const playerTurnDiv = document.querySelector('.turn')
+    const boardDiv = document.querySelector('.board')
+
+    const updateScreen = () => {
+        boardDiv.textContent = "";
+
+        const flatBoard = game.getBoard().flat();
+        const activePlayer = game.getActivePlayer();
+
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn`
+
+        flatBoard.forEach((cell, index) => {
+                const cellButton = document.createElement('button');
+                cellButton.classList.add("cell");
+
+                cellButton.dataset.cell = index;
+                cellButton.textContent = cell.getValue();
+                boardDiv.appendChild(cellButton);
+            })
+    }
+
+    function clickHandlerBoard(e){
+        const selectedCell = e.target.dataset.cell;
+
+        if(!selectedCell) return;
+
+        game.playRound(selectedCell);
+        updateScreen();
+    }
+
+    boardDiv.addEventListener('click', clickHandlerBoard);
+
+    updateScreen()
+}
+
+
+screenController();
