@@ -16,24 +16,13 @@ function GameBoard(){
     const addSelection = (cell, player) => {
 
        const selectedCell = flatBoard[cell];
-
-       let selectionAdded = true;
        
-       if(cell < 0 || cell >= flatBoard.length){
-        console.log("Invalid Cell Index");
-        return !selectionAdded;
-       }else if(selectedCell.getValue() !== ""){
-        console.log("Cell already taken")
-        return !selectionAdded;
+        if(selectedCell.getValue() !== ""){
+        return false;
        }else if(selectedCell.getValue() === ""){
         selectedCell.changeValue(player)
-        return selectionAdded;
+        return true;
        };
-    };
-
-    const printBoard = () => {
-        const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
-        console.log(boardWithCellValues);
     };
 
     const isBoardFull = () => {
@@ -68,7 +57,7 @@ function GameBoard(){
         };
         return null;
     };
-   return{ getBoard, addSelection, printBoard, isBoardFull, checkWinner, };
+   return{ getBoard, addSelection, isBoardFull, checkWinner, };
 }
 
 function Cell(){
@@ -113,11 +102,6 @@ function GameController(){
 
     const getActivePlayer = () => activePlayer;
 
-    const printNewRound = () =>{
-        board.printBoard();
-        console.log(`${getActivePlayer().name}'s turn.`);
-    }
-
     const playRound = (cell) =>{
         const selectionAdded = board.addSelection(cell, getActivePlayer().value);
 
@@ -126,30 +110,17 @@ function GameController(){
             
             if(winner){
                 messageDiv.textContent = `${activePlayer.name} wins!`;
-                console.log(`${winner} wins! Congratulations, ${getActivePlayer().name}! Game over.`);
-                board.printBoard();
                 return;
             }else if(board.isBoardFull()){
                 messageDiv.textContent = "It's a draw! Game over.";
-                console.log("It's a draw! Game over.");
-                board.printBoard();
                 return;
             }else{
                 messageDiv.textContent = "";
-                console.log(
-                    `Adding ${getActivePlayer().name}'s selection into cell ${cell}`
-                );
                 switchPlayer();
-                printNewRound();
             };
             
-        } else{
-            console.log("Please try again.");
-            printNewRound();
         };
     };
-
-    printNewRound();
 
     return{
        playRound,
