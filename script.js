@@ -15,26 +15,26 @@ function GameBoard(){
     const addSelection = (cell, player) => {
        const flatBoard = board.flat();
 
-       if(cell < 0 || cell >= flatBoard.length){
-        console.log("Invalid Cell Index");
-        return;
-       }
-
        const selectedCell = flatBoard[cell]
 
-        if(selectedCell.getValue() === ""){
-            selectedCell.changeValue(player);
-        } else{
-            console.log("Cell already taken");
-        }
-        
+       let selectionAdded = true
+       
+       if(cell < 0 || cell >= flatBoard.length){
+        console.log("Invalid Cell Index");
+        return !selectionAdded;
+       }else if(selectedCell.getValue() !== ""){
+        console.log("Cell already taken")
+        return !selectionAdded;
+       }else if(selectedCell.getValue() === ""){
+        selectedCell.changeValue(player)
+        return selectionAdded;
+       }
     }
 
     const printBoard = () => {
         const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()))
         console.log(boardWithCellValues);
     };
-
 
    return{ getBoard, addSelection, printBoard };
 }
@@ -86,17 +86,22 @@ function GameController(){
     }
 
     const playRound = (cell) =>{
-        console.log(
-            `Adding ${getActivePlayer().name}'s selection into cell ${cell}`
-        )
-        board.addSelection(cell, getActivePlayer().value)
+        const selectionAdded = board.addSelection(cell, getActivePlayer().value);
 
+        if(selectionAdded){
+            console.log(
+                `Adding ${getActivePlayer().name}'s selection into cell ${cell}`
+            )
+            switchPlayer();
+            printNewRound();
+        } else{
+            console.log("Please try again.");
+            printNewRound();
+        }
+            
         /**
          * Check for winner logic here
          */
-
-        switchPlayer();
-        printNewRound();
     }
 
     printNewRound()
