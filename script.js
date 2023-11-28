@@ -11,9 +11,9 @@ function GameBoard(){
     };
 
     const getBoard = () => board;
+    const flatBoard = board.flat();
 
     const addSelection = (cell, player) => {
-       const flatBoard = board.flat();
 
        const selectedCell = flatBoard[cell];
 
@@ -43,26 +43,24 @@ function GameBoard(){
     const checkWinner = () => {
         const linesToCheck = [
             //Rows
-            [[0,0], [0,1], [0,2]],
-            [[1,0], [1,1], [1,2]],
-            [[2,0], [2,1], [2,2]],
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
             //columns
-            [[0,0], [1,0], [2,0]],
-            [[0,1], [1,1], [2,1]],
-            [[0,2], [1,2], [2,2]],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
             //Diagonals
-            [[0,0], [1,1], [2,2]],
-            [[0,2], [1,1], [2,0]],
+            [0, 4, 8],
+            [2, 4, 6],
         ];
 
         for (const line of linesToCheck){
-            const [row1, col1] = line[0];
-            const [row2, col2] = line[1];
-            const [row3, col3] = line[2];
+            const [index1, index2, index3] = line;
 
-            const value1 = board[row1][col1].getValue();
-            const value2 = board[row2][col2].getValue();
-            const value3 = board[row3][col3].getValue();
+            const value1 = flatBoard[index1].getValue();
+            const value2 = flatBoard[index2].getValue();
+            const value3 = flatBoard[index3].getValue();
 
             if(value1 !== "" && value1 === value2 && value2 === value3){
                 return value1;
