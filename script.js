@@ -10,8 +10,6 @@ function GameBoard(){
         };
     };
 
-    
-
     const getBoard = () => board;
     const flatBoard = board.flat();
 
@@ -106,6 +104,7 @@ function Players(playerOneName = "Player One", playerTwoName = "Player Two"){
 function GameController(){
     const board = GameBoard();
     const players = Players();
+    const messageDiv = document.querySelector('.message');
     let activePlayer = players.playersInfo[0];
 
     const switchPlayer = () =>{
@@ -126,14 +125,17 @@ function GameController(){
             const winner = board.checkWinner();
             
             if(winner){
+                messageDiv.textContent = `${activePlayer.name} wins!`;
                 console.log(`${winner} wins! Congratulations, ${getActivePlayer().name}! Game over.`);
                 board.printBoard();
                 return;
             }else if(board.isBoardFull()){
+                messageDiv.textContent = "It's a draw! Game over.";
                 console.log("It's a draw! Game over.");
                 board.printBoard();
                 return;
             }else{
+                messageDiv.textContent = "";
                 console.log(
                     `Adding ${getActivePlayer().name}'s selection into cell ${cell}`
                 );
@@ -158,8 +160,8 @@ function GameController(){
 
 function screenController(){
     const game = GameController();
-    const playerTurnDiv = document.querySelector('.turn')
-    const boardDiv = document.querySelector('.board')
+    const playerTurnDiv = document.querySelector('.turn');
+    const boardDiv = document.querySelector('.board');
 
     const updateScreen = () => {
         boardDiv.textContent = "";
@@ -167,7 +169,7 @@ function screenController(){
         const flatBoard = game.getBoard().flat();
         const activePlayer = game.getActivePlayer();
 
-        playerTurnDiv.textContent = `${activePlayer.name}'s turn`
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
 
         flatBoard.forEach((cell, index) => {
                 const cellButton = document.createElement('button');
@@ -176,8 +178,8 @@ function screenController(){
                 cellButton.dataset.cell = index;
                 cellButton.textContent = cell.getValue();
                 boardDiv.appendChild(cellButton);
-            })
-    }
+        });
+    };
 
     function clickHandlerBoard(e){
         const selectedCell = e.target.dataset.cell;
@@ -186,12 +188,11 @@ function screenController(){
 
         game.playRound(selectedCell);
         updateScreen();
-    }
+    };
 
     boardDiv.addEventListener('click', clickHandlerBoard);
 
-    updateScreen()
-}
-
+    updateScreen();
+};
 
 screenController();
