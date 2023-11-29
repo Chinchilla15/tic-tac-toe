@@ -42,3 +42,12 @@
     font-size: 2rem;
     color: black;
 }
+
+.cell:disabled{
+    color: black;
+    cursor: default;
+}
+
+.playAgain{
+    display:none;
+}
