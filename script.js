@@ -52,10 +52,10 @@ function GameBoard(){
             const value3 = flatBoard[index3].getValue();
 
             if(value1 !== "" && value1 === value2 && value2 === value3){
-                return value1;
+                return true;
             };
         };
-        return null;
+        return false;
     };
    return{ getBoard, addSelection, isBoardFull, checkWinner, };
 }
@@ -110,13 +110,14 @@ function GameController(){
             
             if(winner){
                 messageDiv.textContent = `${activePlayer.name} wins!`;
-                return;
+                return true;
             }else if(board.isBoardFull()){
                 messageDiv.textContent = "It's a draw! Game over.";
-                return;
+                return true;
             }else{
                 messageDiv.textContent = "";
-                switchPlayer();
+                switchPlayer()
+                return false;
             };
             
         };
@@ -133,22 +134,35 @@ function screenController(){
     const game = GameController();
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
+    const cellButtons = [];
+
+    for (let i = 0; i < 9; i++){
+        const cellButton = document.createElement('button');
+        cellButton.classList.add('cell');
+        cellButton.dataset.cell = i;
+        cellButtons.push(cellButton);
+        boardDiv.appendChild(cellButton);
+    };
 
     const updateScreen = () => {
-        boardDiv.textContent = "";
-
         const flatBoard = game.getBoard().flat();
         const activePlayer = game.getActivePlayer();
 
         playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
 
         flatBoard.forEach((cell, index) => {
-                const cellButton = document.createElement('button');
-                cellButton.classList.add("cell");
+            const cellButton = cellButtons[index];
+            cellButton.textContent = cell.getValue();
+        });
+    };
 
-                cellButton.dataset.cell = index;
-                cellButton.textContent = cell.getValue();
-                boardDiv.appendChild(cellButton);
+    function disableBoard() {
+        // Disable the board by removing the click event listener
+        cellButtons.forEach((button) => {
+            if (!button.disabled) {
+                button.removeEventListener('click', clickHandlerBoard);
+                button.disabled = true;
+            };
         });
     };
 
@@ -157,7 +171,12 @@ function screenController(){
 
         if(!selectedCell) return;
 
-        game.playRound(selectedCell);
+        const result = game.playRound(selectedCell);
+
+        if (result) {
+            disableBoard();
+        };
+      
         updateScreen();
     };
 
