@@ -134,6 +134,8 @@ function screenController(){
     const game = GameController();
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
+    const playAgainButton = document.querySelector('.playAgain')
+    const messageDiv = document.querySelector('.message');
     const cellButtons = [];
 
     for (let i = 0; i < 9; i++){
@@ -166,6 +168,26 @@ function screenController(){
         });
     };
 
+    function enableBoard(){
+        cellButtons.forEach((button) =>{
+            button.addEventListener('click', clickHandlerBoard);
+            button.disabled = false
+        });
+    };
+
+    function resetGame(){
+       game.getBoard().forEach((row) => {
+            row.forEach((cell) => {
+                cell.changeValue("")
+            });
+        });
+
+        enableBoard()
+        playAgainButton.style.display = "none";
+        messageDiv.textContent = ""
+        updateScreen()
+    };
+
     function clickHandlerBoard(e){
         const selectedCell = e.target.dataset.cell;
 
@@ -175,10 +197,13 @@ function screenController(){
 
         if (result) {
             disableBoard();
+            playAgainButton.style.display = 'block'
         };
       
         updateScreen();
     };
+
+    playAgainButton.addEventListener('click', resetGame)
 
     boardDiv.addEventListener('click', clickHandlerBoard);
 
