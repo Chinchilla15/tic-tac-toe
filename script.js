@@ -58,7 +58,7 @@ function GameBoard(){
         return false;
     };
    return{ getBoard, addSelection, isBoardFull, checkWinner, };
-}
+};
 
 function Cell(){
     let value = "";
@@ -93,13 +93,16 @@ function Players(playerOneName = "Player One", playerTwoName = "Player Two"){
 function GameController(){
     const board = GameBoard();
     const players = Players();
-    const messageDiv = document.querySelector('.message');
     let activePlayer = players.playersInfo[0];
 
     const switchPlayer = () =>{
-        activePlayer = activePlayer === players.playersInfo[0] ? players.playersInfo[1] : players.playersInfo[0]
+        activePlayer = activePlayer === players.playersInfo[0] ? players.playersInfo[1] : players.playersInfo[0];
     };
 
+    restartPlayer = () =>{
+        return activePlayer = activePlayer === players.playersInfo[1] ? players.playersInfo[0] : players.playersInfo[0];
+    };
+    
     const getActivePlayer = () => activePlayer;
 
     const playRound = (cell) =>{
@@ -108,25 +111,25 @@ function GameController(){
         if(selectionAdded){
             const winner = board.checkWinner();
             
+            let win = 'win';
+            let draw = 'draw';
+
             if(winner){
-                messageDiv.textContent = `${activePlayer.name} wins!`;
-                return true;
+                return win;
             }else if(board.isBoardFull()){
-                messageDiv.textContent = "It's a draw! Game over.";
-                return true;
+                return draw;
             }else{
-                messageDiv.textContent = "";
-                switchPlayer()
+                switchPlayer();
                 return false;
             };
-            
         };
     };
 
     return{
        playRound,
        getActivePlayer,
-       getBoard: board.getBoard
+       restartPlayer,
+       getBoard: board.getBoard,
     };
 };
 
@@ -134,8 +137,7 @@ function screenController(){
     const game = GameController();
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
-    const playAgainButton = document.querySelector('.playAgain')
-    const messageDiv = document.querySelector('.message');
+    const playAgainButton = document.querySelector('.playAgain');
     const cellButtons = [];
 
     for (let i = 0; i < 9; i++){
@@ -151,7 +153,7 @@ function screenController(){
         const activePlayer = game.getActivePlayer();
 
         playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
-
+    
         flatBoard.forEach((cell, index) => {
             const cellButton = cellButtons[index];
             cellButton.textContent = cell.getValue();
@@ -159,7 +161,6 @@ function screenController(){
     };
 
     function disableBoard() {
-        // Disable the board by removing the click event listener
         cellButtons.forEach((button) => {
             if (!button.disabled) {
                 button.removeEventListener('click', clickHandlerBoard);
@@ -171,7 +172,7 @@ function screenController(){
     function enableBoard(){
         cellButtons.forEach((button) =>{
             button.addEventListener('click', clickHandlerBoard);
-            button.disabled = false
+            button.disabled = false;
         });
     };
 
@@ -181,29 +182,36 @@ function screenController(){
                 cell.changeValue("")
             });
         });
-
-        enableBoard()
+        
+        boardDiv.removeEventListener('click', clickHandlerBoard)
+        game.restartPlayer();
+        enableBoard();
         playAgainButton.style.display = "none";
-        messageDiv.textContent = ""
-        updateScreen()
+        updateScreen();
     };
 
     function clickHandlerBoard(e){
         const selectedCell = e.target.dataset.cell;
+        const winner = game.getActivePlayer();
 
         if(!selectedCell) return;
 
         const result = game.playRound(selectedCell);
-
-        if (result) {
-            disableBoard();
-            playAgainButton.style.display = 'block'
-        };
-      
         updateScreen();
+
+
+        if (result === "win") {
+            disableBoard();
+            playAgainButton.style.display = 'block';
+            playerTurnDiv.textContent = `${winner.name} won!`;
+        }else if(result === "draw"){
+            disableBoard();
+            playAgainButton.style.display = 'block';
+            playerTurnDiv.textContent = "Draw!";
+        };
     };
 
-    playAgainButton.addEventListener('click', resetGame)
+    playAgainButton.addEventListener('click', resetGame);
 
     boardDiv.addEventListener('click', clickHandlerBoard);
 
