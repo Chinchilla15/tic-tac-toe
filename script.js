@@ -52,6 +52,10 @@ function GameBoard(){
             const value3 = flatBoard[index3].getValue();
 
             if(value1 !== "" && value1 === value2 && value2 === value3){
+                const cellButtons = document.querySelectorAll('.cell');
+                [index1, index2, index3].forEach((index) => {
+                    cellButtons[index].classList.add('winning-cell');
+                });
                 return true;
             };
         };
@@ -170,6 +174,13 @@ function screenController(){
         });
     };
 
+    function removeHighlightClasses() {
+        const cellButtons = document.querySelectorAll('.cell');
+        cellButtons.forEach((button) => {
+            button.classList.remove('winning-cell');
+        });
+    }
+
     function enableBoard(){
         cellButtons.forEach((button) =>{
             button.addEventListener('click', clickHandlerBoard);
@@ -178,6 +189,7 @@ function screenController(){
     };
 
     function resetGame(){
+        removeHighlightClasses();
        game.getBoard().forEach((row) => {
             row.forEach((cell) => {
                 cell.changeValue("")
