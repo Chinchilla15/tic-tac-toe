@@ -17,7 +17,7 @@ body{
 }
 
 header{
-    height: 100px;
+    height: 120px;
     width: 100%;
     background-color: var(--secondary-blue);
     color: var(--txt-color);
@@ -69,10 +69,13 @@ header{
     background-color: #0a0330;
 }
 
+
 .cell:disabled{
-    color: var(--txt-color);
-    background-color: #0F044C;
     cursor: default;
+}
+
+.cell:disabled:hover{
+    background-color: var(--cell-color);
 }
 
 .playAgain{
@@ -90,6 +93,7 @@ header{
 
 .playAgain:hover{
     transform: scale(1.08);
+    cursor: pointer;
 }
 
 .playerBox{
@@ -119,4 +123,8 @@ a{
 
 a:hover{
     color: red;
+}
+
+.winning-cell{
+    color: green;
 }
