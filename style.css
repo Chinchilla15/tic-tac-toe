@@ -1,3 +1,11 @@
+body{
+    --bkg-color: #1B1B1B;
+    --txt-color: #F5F5F5;
+    --board-color: #787A91;
+    --cell-color: #0F044C;
+    background-color: var(--bkg-color);
+}
+
 *{
     box-sizing: border-box;
 }
@@ -9,6 +17,10 @@
     justify-content: center;
 }
 
+.turn{
+    color: var(--txt-color);
+}
+
 .board{
     display: grid;
     height: 500px;
@@ -16,9 +28,10 @@
     grid-template-columns: repeat(3,1fr);
     grid-template-rows: repeat(3,1fr);
     border: 1px solid black;
-    gap: 4px;
-    padding: 4px;
-    background-color: blue;
+    gap: 8px;
+    padding: 8px;
+    background-color: var(--board-color);
+    border-radius: 24px;
 }
 
 .cell{
@@ -27,16 +40,43 @@
     align-items: center;
     text-align: center;
     font-size: 8rem;
-    border: 1px solid red;
-    background-color: rgb(255, 0, 43);
+    border: none;
+    background-color: var(--cell-color);
     cursor: pointer;
+    color: var(--txt-color);
+    border-radius: 16px;
+}
+
+.cell:hover{
+    background-color: #0a0330;
 }
 
 .cell:disabled{
-    color: black;
+    color: var(--txt-color);
+    background-color: #0F044C;
     cursor: default;
 }
 
 .playAgain{
     display:none;
+    margin-top: 24px;
+    height: 2.5rem;
+    width: 10rem;
+    font-size: 20px;
+    border-radius: 12px;
+    transition: transform .1s; 
+    background-color: #141E61;
+    color: var(--txt-color);
+    border: 1px solid var(--txt-color);
+}
+
+.playAgain:hover{
+    transform: scale(1.08);
+}
+
+.playerBox{
+    color: var(--txt-color);
+    font-size: 24px;
+    display: flex;
+    gap: 36px;
 }
