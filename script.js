@@ -80,11 +80,11 @@ function Players(playerOneName = "Player One", playerTwoName = "Player Two"){
         const playersInfo = [
         {
             name: playerOneName,
-            value: "x"
+            value: "X"
         },
         {
             name: playerTwoName,
-            value: "o"
+            value: "O"
         }
     ];
         return { playersInfo,};
@@ -100,7 +100,7 @@ function GameController(){
     };
 
     restartPlayer = () =>{
-        return activePlayer = activePlayer === players.playersInfo[1] ? players.playersInfo[0] : players.playersInfo[0];
+        activePlayer = activePlayer === players.playersInfo[1] ? players.playersInfo[0] : players.playersInfo[0];
     };
     
     const getActivePlayer = () => activePlayer;
@@ -138,6 +138,7 @@ function screenController(){
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
     const playAgainButton = document.querySelector('.playAgain');
+    const playerBox = document.querySelector('.playerBox');
     const cellButtons = [];
 
     for (let i = 0; i < 9; i++){
@@ -187,6 +188,7 @@ function screenController(){
         game.restartPlayer();
         enableBoard();
         playAgainButton.style.display = "none";
+        playerBox.style.display = 'flex'
         updateScreen();
     };
 
@@ -198,7 +200,7 @@ function screenController(){
 
         const result = game.playRound(selectedCell);
         updateScreen();
-
+        playerBox.style.display = 'none'
 
         if (result === "win") {
             disableBoard();
