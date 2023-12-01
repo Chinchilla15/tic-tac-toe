@@ -41,10 +41,10 @@ header{
 
 .board{
     display: grid;
-    height: 500px;
-    width: 500px;
-    grid-template-columns: repeat(3,1fr);
-    grid-template-rows: repeat(3,1fr);
+    height: 30rem;
+    width: 32rem;
+    grid-template-columns: repeat(3,159px);
+    grid-template-rows: repeat(3,149px);
     border: 1px solid black;
     gap: 8px;
     padding: 8px;
